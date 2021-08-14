@@ -5,6 +5,7 @@ import os
 from src import pyhttpfs
 from src.args import args
 from src.config import config
+from .core.icons import determine_icon_css
 from flask import redirect, url_for, abort, send_file, render_template
 
 # Routes
@@ -43,10 +44,11 @@ def explore_path(path: str = ""):
         filepath = os.path.join(fullpath, item)
         filetype = {True: "folder", False: "file"}[os.path.isdir(filepath)]
 
-        # extension = item.split(".")[-1] if "." in item else None
+        icon = determine_icon_css(item, filetype)
         al_sorted_items.append(
             {
                 "name": item,
+                "icon": icon,
                 "type": filetype,
                 "path": filepath.replace(explorer_location, "", 1)
             }
@@ -54,3 +56,7 @@ def explore_path(path: str = ""):
 
     sorted_items = [_ for _ in al_sorted_items if _["type"] == "folder"] + [_ for _ in al_sorted_items if _["type"] == "file"]
     return render_template("explorer.html", items = sorted_items, path = path), 200
+
+@pyhttpfs.route("/stat/<path:path>")
+def get_static_file(path):
+    return send_file(os.path.join(pyhttpfs.static_dir, path), conditional = True)

@@ -1,0 +1,6 @@
+[
+    {"name": "_blank.png", "matches": []},
+    {"name": "_folder.png", "matches": []},
+    {"name": "_top.png", "matches": []},
+    {"name": "txt.png", "matches": ["txt", "rtf", "doc", "md"]}
+]
