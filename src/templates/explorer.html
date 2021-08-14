@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <body>
+        <p>Directory listing of <b>{{ path }}</b></p>
+        <hr>
+        {% for item in items %}
+            <a href = "/pub/{{ item['path'] }}">{{ item["name"] }}</a> <br>
+        {% endfor %}
+        <hr>
+        <i>PyHTTPFS v{{ v }} / Python {{ pyv }}</i>
+    </body>
+</html>
