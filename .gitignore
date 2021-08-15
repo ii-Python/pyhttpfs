@@ -1,1 +1,7 @@
+# Hide cache
 __pycache__/
+
+# Hide build files
+dist/
+build/
+*.egg-info
