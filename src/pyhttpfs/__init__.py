@@ -7,7 +7,7 @@ import platform
 from flask import Flask
 
 # Meta
-__version__ = "1.0.4"
+__version__ = "1.0.6"
 
 # Initialization
 base_dir = os.path.abspath(os.path.dirname(__file__))

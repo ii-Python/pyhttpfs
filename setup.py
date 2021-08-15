@@ -52,9 +52,11 @@ setup(
     package_dir = {"pyhttpfs": "src/pyhttpfs"},
     package_data = {"pyhttpfs": ["templates/*", "assets/*", "assets/static/*"]},
     packages = find_packages("src"),
-    python_requires = ">=3.6, <4",
     entry_points = """
         [console_scripts]
         pyhttpfs=pyhttpfs.__main__:main
-    """
+    """,
+    python_requires = ">=3.7, <4",
+    license_files = ("LICENSE.txt",),
+    install_requires = open("reqs.txt", "r").read().splitlines()
 )
