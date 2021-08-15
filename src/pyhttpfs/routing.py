@@ -50,35 +50,51 @@ def explore_path(path: str = "./"):
     if explorer_location not in fullpath:
         return abort(403)
 
+    is_root = fullpath == explorer_location
+
     # Handle files
     if os.path.isfile(fullpath):
         return send_file(fullpath, conditional = True)
 
-    # Handle folder
-    all_items, al_sorted_items = os.listdir(fullpath) + (["../"] if fullpath != explorer_location else []), []
-    for item in sorted(all_items):
+    elif not os.path.isdir(fullpath):
+        return abort(404)
+
+    # Handle sorting items
+    sorted_folders, sorted_files, max_name_length = [], [], 0
+    for item in sorted((["../"] if not is_root else []) + os.listdir(fullpath)):
         filepath = os.path.join(fullpath, item)
         if os.path.islink(filepath):
             continue
 
         filetype = {True: "folder", False: "file"}[os.path.isdir(filepath)]
         icon = determine_icon_css(item, filetype)
+        new_item = {
+            "name": item, "icon": icon, "size": format_bytes(os.path.getsize(filepath)) if filetype == "file" else "---",
+            "type": filetype, "path": filepath.replace(explorer_location, "", 1).lstrip("/")
+        }
+        if new_item["type"] == "folder":
+            sorted_folders.append(new_item)
 
-        al_sorted_items.append(
-            {
-                "name": item, "icon": icon, "size": format_bytes(os.path.getsize(filepath)) if filetype == "file" else "---",
-                "type": filetype, "path": filepath.replace(explorer_location, "", 1).lstrip("/")
-            }
-        )
+        else:
+            sorted_files.append(new_item)
 
-    sorted_items = [_ for _ in al_sorted_items if _["type"] == "folder"] + [_ for _ in al_sorted_items if _["type"] == "file"]  # Folders first, then files
+        # Update longest filename
+        length = len(new_item["name"][:75])
+        if length > max_name_length:
+            max_name_length = length
+
+    # Render item
     return render_template(
         "explorer.html",
-        items = sorted_items,
-        path = ("/" if fullpath == explorer_location else "") + (fullpath.replace(explorer_location, "", 1) if explorer_location != "/" else fullpath),
-        extra_spacer = f"<style>td.spacer {{ padding-left: {250 + (8 * len(max([_['name'][:75] for _ in sorted_items], key = len)))}px; }}</style>"
+        items = sorted_folders + sorted_files,
+        path = ("/" if is_root else "") + (fullpath.replace(explorer_location, "", 1) if is_root else fullpath),
+        extra_spacer = f"<style>td.spacer {{ padding-left: {250 + (8 * max_name_length)}px; }}</style>"
     ), 200
 
 @pyhttpfs.route("/stat/<path:path>")
 def get_static_file(path):
     return send_file(os.path.join(pyhttpfs.static_dir, path), conditional = True)
+
+@pyhttpfs.errorhandler(404)
+def handle_404(e):
+    return render_template("errors/404.html")

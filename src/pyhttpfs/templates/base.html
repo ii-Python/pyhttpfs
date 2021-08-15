@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset = "utf-8">
+        <meta http-equiv = "content-type" content = "text/html">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+
+        <!-- CSS -->
+        {% block css %}{% endblock %}
+
+        <!-- Extra accessories -->
+        <title>{% block title %}{% endblock %} · PyHTTPFS</title>
+    </head>
+    <body>
+        <!-- Top of page -->
+        <p>{% block header %}{% endblock %}</p>
+        <hr>
+
+        {% block content %}{% endblock %}
+
+        <!-- Footer -->
+        <hr>
+        <i>PyHTTPFS v{{ v }} / Python {{ pyv }}</i>
+    </body>
+</html>

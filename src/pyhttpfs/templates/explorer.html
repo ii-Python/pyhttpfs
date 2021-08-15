@@ -1,35 +1,22 @@
-<!DOCTYPE html>
-<html lang = "en">
-    <head>
-        <meta charset = "utf-8">
-        <meta http-equiv = "content-type" content = "text/html">
-        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+{% block title %}{{ path }}{% endblock %}
+{% block css %}
+    <link href = "/stat/css/explorer.css" type = "text/css" rel = "stylesheet">
+    {{ extra_spacer|safe }}
+{% endblock %}
 
-        <!-- CSS -->
-        <link href = "/stat/css/explorer.css" type = "text/css" rel = "stylesheet">
-        {{ extra_spacer|safe }}
-
-        <!-- Extra accessories -->
-        <title>{{ path }} · PyHTTPFS</title>
-    </head>
-    <body>
-        <!-- Top of explorer -->
-        <p>Directory listing of <b>{{ path }}</b></p>
-        <hr>
-
-        <!-- File listing -->
-        <table>
-            <tr><td><b>Name</b></td><td class = "spacer"><b>Size</b></td></tr>
-            {% for item in items %}
-                <tr>
-                    <td>{{ item["icon"]|safe }} <a href = "/pub/{{ item['path'] }}" title = "{{ item['name'] }}">{{ item["name"]|truncate(75) }}</a></td>
-                    <td class = "spacer">{{ item["size"] }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-
-        <!-- Footer -->
-        <hr>
-        <i>PyHTTPFS v{{ v }} / Python {{ pyv }}</i>
-    </body>
-</html>
+{% block header %}
+    Directory listing of <b>{{ path }}</b>
+{% endblock %}
+{% block content %}
+    <!-- File listing -->
+    <table>
+        <tr><td><b>Name</b></td><td class = "spacer"><b>Size</b></td></tr>
+        {% for item in items %}
+            <tr>
+                <td>{{ item["icon"]|safe }} <a href = "/pub/{{ item['path'] }}" title = "{{ item['name'] }}">{{ item["name"]|truncate(75) }}</a></td>
+                <td class = "spacer">{{ item["size"] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
