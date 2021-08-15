@@ -9,7 +9,7 @@ from pyhttpfs import pyhttpfs
 _ICONS_FILE = os.path.join(pyhttpfs.assets_dir, "icons.json")
 _CAN_LOAD = os.path.isfile(_ICONS_FILE)
 if not _CAN_LOAD:
-    print("Warning: no icons file is present, icons will be disabled.")
+    pyhttpfs.log("[yellow]No `icons.json` file present, icons will be disabled.")
 
 _ICON_DATA = json.loads(open(_ICONS_FILE, "r").read()) if _CAN_LOAD else {}
 

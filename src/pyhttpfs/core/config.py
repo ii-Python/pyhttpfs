@@ -4,7 +4,7 @@
 import os
 import json
 from typing import Any
-from pyhttpfs import base_dir
+from pyhttpfs import pyhttpfs, base_dir
 
 # Config class
 class Configuration(object):
@@ -20,7 +20,7 @@ class Configuration(object):
                     self._raw_data = json.loads(config.read())
 
             except Exception as exc:
-                print("Warning: Failed to load config file at '{}';\n\t{}".format(config_file, exc))
+                pyhttpfs.log("[red]Failed to load config file at '{}';\n\t{}".format(config_file, exc))
 
     def get(self, key: Any) -> Any:
         if key not in self._raw_data:

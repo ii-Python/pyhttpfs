@@ -9,6 +9,17 @@ from pyhttpfs.core.config import config
 from pyhttpfs.core.icons import determine_icon_css
 from flask import redirect, url_for, abort, send_file, render_template
 
+# Initialization
+explorer_location = args.get("l") or config.get("defaultExplorerLocation") or os.getcwd()
+if explorer_location is None:
+    pyhttpfs.log("[red]No explorer location set, use the `-l` flag, or a config file.", terminate = 1)
+
+elif not os.path.isdir(explorer_location):
+    pyhttpfs.log("[red]Specified explorer location does not exist.", terminate = 1)
+
+explorer_location = os.path.abspath(explorer_location)
+pyhttpfs.explorer_location = explorer_location
+
 # Handle file size
 suffixes = ["B", "KB", "MB", "GB", "TB", "PB"]
 def format_bytes(nbytes: int) -> str:
@@ -38,14 +49,6 @@ def explore_path(path: str = "./"):
         return abort(400)
 
     # Initialization
-    explorer_location = args.get("l") or config.get("defaultExplorerLocation") or os.getcwd()
-    if explorer_location is None:
-        raise RuntimeError("The current explorer location is None!")
-
-    elif not os.path.isdir(explorer_location):
-        raise RuntimeError("Explorer location isn't a valid directory!")
-
-    explorer_location = os.path.abspath(explorer_location)
     fullpath = os.path.abspath(os.path.join(explorer_location, path))
     if explorer_location not in fullpath:
         return abort(403)

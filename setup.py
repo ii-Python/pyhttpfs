@@ -10,15 +10,37 @@ here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding = "utf-8")
 
 # Package finder
-def find_packages(dir):
+def find_packages(dir_: str) -> list:
     packs = []
-    for p, _, __ in os.walk(dir):
-        path = p.replace("\\", "/").replace("/", ".").replace(dir + ".", "")
+    for p, _, __ in os.walk(dir_):
+        path = p.replace("\\", "/").replace("/", ".").replace(dir_ + ".", "")
         if "egg-info" not in path and "__pycache__" not in path:
-            if path != dir:
+            if path != dir_:
                 packs.append(path)
 
     return packs
+
+def find_data_dirs(dir_: str) -> list:
+    dirs = []
+    for p, _, f in os.walk(dir_):
+        name = p.replace(dir_, "", 1).lstrip("/")
+        if not name:
+            continue
+
+        elif ".egg-info" in name or "__pycache__" in name:
+            continue
+
+        has_code = False
+        for file in f:
+            if file.endswith(".py"):
+                has_code = True
+
+        if has_code:
+            continue
+
+        dirs.append(name.rstrip("/") + "/*")
+
+    return dirs
 
 # Handle versions (https://github.com/pypa/pip/blob/main/setup.py#L11)
 def read(rel_path):
@@ -52,7 +74,7 @@ setup(
     ],
     keywords = "http filesystem browser fileserver httpserver",
     package_dir = {"pyhttpfs": "src/pyhttpfs"},
-    package_data = {"pyhttpfs": ["templates/*", "assets/*", "assets/static/*"]},
+    package_data = {"pyhttpfs": find_data_dirs("src/pyhttpfs")},
     packages = find_packages("src"),
     entry_points = """
         [console_scripts]
