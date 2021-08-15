@@ -38,6 +38,7 @@ def get_version(rel_path):
 # Handle setup
 setup(
     name = "pyhttpfs",
+    url = "https://github.com/ii-Python/pyhttpfs",
     version = get_version("src/pyhttpfs/__init__.py"),
     description = "Fast and efficient filesystem browser",
     long_description = long_description,
@@ -47,6 +48,7 @@ setup(
     classifiers = [
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3 :: Only",
+        "Operating System :: OS Independent"
     ],
     keywords = "http filesystem browser fileserver httpserver",
     package_dir = {"pyhttpfs": "src/pyhttpfs"},
@@ -58,5 +60,10 @@ setup(
     """,
     python_requires = ">=3.7, <4",
     license_files = ("LICENSE.txt",),
-    install_requires = open("reqs.txt", "r").read().splitlines()
+    install_requires = open("reqs.txt", "r").read().splitlines(),
+    license = "MIT",
+    project_urls = {
+        "Source": "https://github.com/ii-Python/pyhttpfs/",
+        "Bug Reports": "https://github.com/ii-Python/pyhttpfs/issues"
+    }
 )
