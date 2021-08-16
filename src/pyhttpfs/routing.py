@@ -90,7 +90,7 @@ def explore_path(path: str = "./"):
     return render_template(
         "explorer.html",
         items = sorted_folders + sorted_files,
-        path = ("/" if is_root else "") + (fullpath.replace(explorer_location, "", 1) if is_root else fullpath),
+        path = ("/" if is_root else "") + fullpath.replace(explorer_location, "", 1),
         extra_spacer = f"<style>td.spacer {{ padding-left: {250 + (8 * max_name_length)}px; }}</style>"
     ), 200
 
