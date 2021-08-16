@@ -8,7 +8,7 @@ from flask import Flask
 from pyhttpfs._logging import log
 
 # Initialization
-__version__ = "1.0.8"
+__version__ = "1.0.8b"
 logging.getLogger("werkzeug").setLevel(logging.ERROR)
 
 # App Initialization
