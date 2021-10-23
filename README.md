@@ -24,6 +24,6 @@ It is also worth noting that by default, **PyHTTPFS runs on port 8080**.
 
 #### Configuration
 In order to fully use PyHTTPFS to it's maximum potential, you'll have to configure it. The following options are available to you:
-- `-b`, to bind to a specific address (eg. `-b 127.0.0.1`)
-- `-p`, to bind to a specific port (eg. `-p 80`)
-- `-l`, to share a specific location (eg. `-l /home`)
+- `-b` or `--bind`, to bind to a specific address (eg. `-b 127.0.0.1`)
+- `-p` or `--port`, to bind to a specific port (eg. `-p 80`)
+- `-l` or `--dir`, to share a specific location (eg. `-l /home`)

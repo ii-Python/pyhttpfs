@@ -8,20 +8,36 @@ from typing import Union
 class Arguments(object):
     def __init__(self) -> None:
         self.args = {}
+        self.shorthands = {
+            "dir": "l",
+            "bind": "b",
+            "port": "p"
+        }
+
         self.parse_args()
 
     def parse_args(self) -> None:
         if not hasattr(self, "argv"):
             self.argv = sys.argv[1:]
 
+        waiting = None
         for arg in self.argv:
-            if arg.strip() and arg[0] == "-" and not arg.startswith("--"):
-                try:
-                    value = self.argv[self.argv.index(arg) + 1]
-                    self.args[arg[1:]] = value
+            if not arg.strip() or not arg[0] == "-" and waiting is None:
+                continue
 
-                except IndexError:
-                    raise ValueError("Config key '{}' has no value!".format(arg))
+            elif waiting is not None:
+                self.args[waiting] = arg
+                waiting = None
+                continue
+
+            arg = arg.lstrip("-")
+            if arg in self.shorthands:
+                arg = self.shorthands[arg]
+
+            waiting = arg
+
+        if waiting is not None:
+            raise ValueError(f"'{waiting}' was provided but no value was specified!")
 
     def get(self, key: str, accept: type = None) -> Union[str, None]:
         if key not in self.args:

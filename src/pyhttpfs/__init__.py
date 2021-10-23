@@ -5,10 +5,10 @@ import os
 import logging
 import platform
 from flask import Flask
-from pyhttpfs._logging import log
+from pyhttpfs._logging import log, banner
 
 # Initialization
-__version__ = "1.0.8b"
+__version__ = "1.0.9"
 logging.getLogger("werkzeug").setLevel(logging.ERROR)
 
 # App Initialization
@@ -25,6 +25,9 @@ pyhttpfs.log = log
 @pyhttpfs.context_processor
 def inject_globals():
     return {"v": __version__, "pyv": platform.python_version(), "pyhttpfs": pyhttpfs}
+
+# Show server banner
+banner = banner(__version__)
 
 # Routes
 from .routing import *
